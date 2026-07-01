@@ -4,7 +4,7 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   // GitHub Pages project repo uses '/repo-name/'; personal site uses '/'.
   // For GitHub Pages deployment, set this to your repo name.
-  base: "/alive-pdf/",
+  base: "/Alive-PDF/",
 
   build: {
     outDir: "dist",
