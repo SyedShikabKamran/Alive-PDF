@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Alive PDF — Urdu Story Reader</title>
+  <!-- fonts, icons, PDF.js and styles are bundled locally via src/main.js (no CDN) -->
+</head>
+<body class="theme-dark">
+<div id="app">
+
+  <!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
+  <header class="header">
+    <div class="logo">
+      <i class="fa-solid fa-book-open-reader logo-icon"></i>
+      <span>Alive <em>PDF</em></span>
+    </div>
+
+    <nav class="nav">
+      <button id="btn-editor" class="nav-btn active">
+        <i class="fa-solid fa-pen-nib"></i> Annotate
+      </button>
+      <button id="btn-viewer" class="nav-btn">
+        <i class="fa-solid fa-eye"></i> Read
+      </button>
+    </nav>
+
+    <div class="header-actions">
+      <div class="more-menu-wrap">
+        <button id="btn-more" class="btn outline" title="Export, Import &amp; Pack options">⋯ More</button>
+        <div id="more-menu" class="more-menu" hidden>
+          <button id="btn-share-link" class="more-item"><i class="fa-solid fa-link"></i> Copy Share Link</button>
+          <button id="btn-export-pack" class="more-item"><i class="fa-solid fa-share-nodes"></i> Share Pack</button>
+          <button id="btn-import-pack" class="more-item"><i class="fa-solid fa-wand-magic-sparkles"></i> Load Pack</button>
+          <div class="more-divider"></div>
+          <button id="btn-export" class="more-item"><i class="fa-solid fa-file-export"></i> Export Project</button>
+          <button id="btn-import" class="more-item"><i class="fa-solid fa-file-import"></i> Import Project</button>
+        </div>
+        <input type="file" id="import-pack-file" accept=".json" style="display:none">
+        <input type="file" id="import-file" accept=".alivepdf" style="display:none">
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════ WORKSPACE ═══════════════════════════ -->
+  <main class="workspace">
+
+    <!-- ──────────────── EDITOR VIEW ──────────────── -->
+    <section id="editor-screen" class="view active">
+
+      <!-- Editor Toolbar -->
+      <div class="editor-toolbar">
+        <div class="vtb-group">
+          <button id="btn-zoom-out" class="vtb-btn" title="Zoom out (-)">−</button>
+          <input id="zoom-label" class="vtb-zoom-input" value="100%" title="Type a zoom % and press Enter">
+          <button id="btn-zoom-in" class="vtb-btn" title="Zoom in (+)">+</button>
+        </div>
+        <div class="vtb-sep"></div>
+        <div class="vtb-group">
+          <button id="btn-prev-page" class="vtb-btn" title="Previous page">‹</button>
+          <input id="jump-input" type="number" min="1" class="vtb-page-input" placeholder="1">
+          <span id="page-total-editor" class="vtb-label">/ —</span>
+          <button id="btn-next-page" class="vtb-btn" title="Next page">›</button>
+        </div>
+        <div class="vtb-sep"></div>
+        <div class="vtb-group">
+          <button id="btn-shortcuts" class="vtb-btn" title="Keyboard shortcuts (?)">?</button>
+        </div>
+      </div>
+
+      <!-- Editor body: sidebar + canvas -->
+      <div class="editor-body">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+
+        <!-- 1 · Document -->
+        <div class="card">
+          <h3><i class="fa-solid fa-file-pdf"></i> Document</h3>
+          <div id="dropzone" class="dropzone">
+            <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+            <p>Drop PDF here or <span class="link">browse</span></p>
+            <input type="file" id="pdf-file" accept="application/pdf" style="display:none">
+          </div>
+          <div id="pdf-status" class="status-pill" style="display:none">
+            <i class="fa-solid fa-circle-check"></i>
+            <span id="pdf-name">—</span>
+          </div>
+        </div>
+
+        <!-- 2 · Pack Info -->
+        <div class="card">
+          <h3><i class="fa-solid fa-tags"></i> Pack Info</h3>
+          <p class="hint">Saved in exported reaction packs.</p>
+          <div class="field">
+            <label>Novel / Book Title</label>
+            <input id="novel-title-input" type="text" placeholder="e.g., پیار کا پہلا قدم">
+          </div>
+          <div class="field">
+            <label>Your Name / Handle</label>
+            <input id="creator-input" type="text" placeholder="e.g., @rehan_reads">
+          </div>
+        </div>
+
+        <!-- 3 · Watermark (collapsed by default) -->
+        <div class="card">
+          <details class="wm-details">
+            <summary><i class="fa-solid fa-stamp"></i> Watermark</summary>
+            <div class="wm-body">
+              <div class="field">
+                <label>Watermark Text</label>
+                <input id="f-watermark" type="text" placeholder="e.g., Novel Planet / ناول پلینٹ">
+              </div>
+              <div class="range-row">
+                <label>Opacity</label>
+                <input type="range" id="wm-opacity" min="0.05" max="0.5" step="0.05" value="0.15">
+                <span id="wm-opacity-val" class="range-val">0.15</span>
+              </div>
+              <div class="range-row">
+                <label>Angle</label>
+                <input type="range" id="wm-angle" min="-90" max="90" step="5" value="-30">
+                <span id="wm-angle-val" class="range-val">-30°</span>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- 4 · Line Highlights -->
+        <div class="card">
+          <h3><i class="fa-solid fa-highlighter"></i> Line Highlights</h3>
+          <p class="hint">Drag on a page to mark a line → add emojis → switch to <strong>Read</strong> to see them animate.</p>
+          <div id="highlights-list" class="hl-list">
+            <p class="empty-hint">No highlights yet.</p>
+          </div>
+          <button id="btn-reset-highlights" class="btn outline sm" style="margin-top:10px;width:100%">
+            <i class="fa-solid fa-rotate-left"></i> Reset All Highlights
+          </button>
+        </div>
+
+      </aside>
+
+      <!-- PDF Canvas Area -->
+      <div class="canvas-area">
+        <div id="editor-empty" class="empty-overlay">
+          <div class="empty-card">
+            <i class="fa-solid fa-book-open glow-icon"></i>
+            <h2>Welcome to Alive PDF</h2>
+            <p>Upload a Urdu story or novel PDF to start adding visual line highlights and emoji reactions.</p>
+            <button class="btn primary" onclick="document.getElementById('pdf-file').click()">
+              <i class="fa-solid fa-file-arrow-up"></i> Upload PDF
+            </button>
+          </div>
+        </div>
+        <div id="editor-scroll" class="pdf-scroll"></div>
+      </div>
+
+      </div><!-- /editor-body -->
+
+    </section>
+
+    <!-- ──────────────── VIEWER VIEW ──────────────── -->
+    <section id="viewer-screen" class="view">
+
+      <!-- Viewer Toolbar -->
+      <div id="viewer-toolbar" class="viewer-toolbar" style="display:none">
+        <div class="vtb-group">
+          <button id="vbtn-zoom-out" class="vtb-btn" title="Zoom out (-)">−</button>
+          <input id="viewer-zoom-label" class="vtb-zoom-input" value="100%" title="Type a zoom % and press Enter">
+          <button id="vbtn-zoom-in" class="vtb-btn" title="Zoom in (+)">+</button>
+        </div>
+        <div class="vtb-sep"></div>
+        <div class="vtb-group">
+          <button id="vbtn-prev-page" class="vtb-btn" title="Previous page">‹</button>
+          <input id="viewer-page-input" type="number" min="1" class="vtb-page-input" placeholder="1">
+          <span id="viewer-page-total" class="vtb-label">/ —</span>
+          <button id="vbtn-next-page" class="vtb-btn" title="Next page">›</button>
+        </div>
+        <div class="vtb-sep"></div>
+        <!-- Highlight sweep speed -->
+        <div class="vtb-group" title="Highlight animation speed">
+          <label class="vtb-label" for="hl-speed-select" style="opacity:.7;font-size:11px">Speed</label>
+          <select id="hl-speed-select" class="vtb-speed-select">
+            <option value="3.6">0.5×</option>
+            <option value="1.8" selected>1×</option>
+            <option value="1.2">1.5×</option>
+            <option value="0.9">2×</option>
+            <option value="0.5">3×</option>
+            <option value="0.01">Instant</option>
+          </select>
+        </div>
+        <div class="vtb-sep"></div>
+        <!-- Theme picker -->
+        <div class="vtb-group vtb-themes">
+          <button class="theme-dot theme-dot-dark active" data-theme="dark" title="Dark theme"></button>
+          <button class="theme-dot theme-dot-sepia" data-theme="sepia" title="Sepia theme"></button>
+          <button class="theme-dot theme-dot-light" data-theme="light" title="Light theme"></button>
+        </div>
+        <div class="vtb-sep"></div>
+        <div class="vtb-group">
+          <button id="vbtn-fullscreen" class="vtb-btn" title="Fullscreen (F)">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+          <button id="vbtn-shortcuts" class="vtb-btn" title="Keyboard shortcuts (?)">?</button>
+        </div>
+      </div>
+
+      <!-- Reading Area -->
+      <div id="reading-area" class="reading-area" style="display:none">
+        <div id="reading-progress"></div>
+        <div id="viewer-scroll" class="pdf-scroll viewer-pdf"></div>
+        <div id="emoji-layer" class="emoji-layer"></div>
+        <div id="ann-dots"></div>
+      </div>
+
+      <!-- No PDF empty state -->
+      <div id="viewer-empty" class="empty-overlay" style="display:none">
+        <div class="empty-card">
+          <i class="fa-solid fa-circle-exclamation glow-icon"></i>
+          <h2>No Project Loaded</h2>
+          <p>Switch to <strong>Editor</strong> to upload a PDF and set up your novel project.</p>
+          <button id="btn-go-editor" class="btn primary">
+            <i class="fa-solid fa-pen-nib"></i> Open Editor
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </main><!-- /workspace -->
+
+  <!-- ═══════════════════════════ ANNOTATION POPOVER ═══════════════════════════ -->
+  <div id="popover" class="popover" style="display:none">
+    <div class="pop-arrow"></div>
+    <h4>Add Reaction</h4>
+
+    <!-- Color picker -->
+    <div class="color-picker">
+      <button class="color-dot active" data-color="gold"   title="Gold"   style="background:#ffd000"></button>
+      <button class="color-dot"        data-color="rose"   title="Rose"   style="background:#ff6b8a"></button>
+      <button class="color-dot"        data-color="sky"    title="Sky"    style="background:#38bdf8"></button>
+      <button class="color-dot"        data-color="mint"   title="Mint"   style="background:#34d399"></button>
+      <button class="color-dot"        data-color="violet" title="Violet" style="background:#a78bfa"></button>
+      <button class="color-dot"        data-color="coral"  title="Coral"  style="background:#fb923c"></button>
+    </div>
+
+    <!-- Emoji grid -->
+    <div class="emoji-grid">
+      <button class="ep">❤️</button><button class="ep">😭</button>
+      <button class="ep">😮</button><button class="ep">🔥</button>
+      <button class="ep">✨</button><button class="ep">🌸</button>
+      <button class="ep">💔</button><button class="ep">🤫</button>
+      <button class="ep">😍</button><button class="ep">😢</button>
+      <button class="ep">💫</button><button class="ep">🫶</button>
+    </div>
+
+    <div class="pop-input-row">
+      <input id="emoji-input" type="text" placeholder="Emojis…">
+    </div>
+    <div class="pop-input-row" style="margin-bottom:12px">
+      <input id="float-text-input" type="text" placeholder="Reaction text e.g. سبحان اللہ! (optional)">
+    </div>
+
+    <button id="btn-pop-save" class="btn primary" style="width:100%">
+      <i class="fa-solid fa-check"></i> Save Reaction
+    </button>
+
+    <details class="pop-advanced">
+      <summary>Options</summary>
+      <div class="pop-toggles">
+        <label><input type="checkbox" id="pop-show-hl" checked> Highlight glow</label>
+        <label><input type="checkbox" id="pop-show-float" checked> Float effect</label>
+      </div>
+    </details>
+
+    <button id="btn-pop-cancel" class="btn-link">Cancel</button>
+  </div>
+
+  <!-- ═══════════════════════════ KEYBOARD SHORTCUTS MODAL ═══════════════════════════ -->
+  <div id="shortcuts-modal" class="shortcuts-modal" aria-modal="true" role="dialog" aria-label="Keyboard shortcuts">
+    <div class="shortcuts-content">
+      <div class="shortcuts-header">
+        <h3><i class="fa-solid fa-keyboard"></i> Keyboard Shortcuts</h3>
+        <button id="btn-close-shortcuts" class="icon-btn" aria-label="Close shortcuts">✕</button>
+      </div>
+      <div class="shortcuts-grid">
+        <div class="sc-row"><kbd>+</kbd> / <kbd>=</kbd><span>Zoom in</span></div>
+        <div class="sc-row"><kbd>-</kbd><span>Zoom out</span></div>
+        <div class="sc-row"><kbd>F</kbd><span>Fullscreen</span></div>
+        <div class="sc-row"><kbd>?</kbd><span>Show shortcuts</span></div>
+        <div class="sc-row"><kbd>Esc</kbd><span>Close popover / modal</span></div>
+        <div class="sc-row"><kbd>T</kbd><span>Cycle theme</span></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- First-use overlay -->
+<div id="first-use-overlay" class="first-use-overlay">
+  <div class="first-use-card">
+    <div class="fu-icon">📖</div>
+    <h2>Welcome to Alive PDF</h2>
+    <p>React to your Urdu novel as you read.</p>
+    <div class="fu-steps">
+      <div class="fu-step"><span class="fu-num">1</span><p>Upload your PDF in <strong>Annotate</strong></p></div>
+      <div class="fu-step"><span class="fu-num">2</span><p>Drag on a line → add emojis &amp; text</p></div>
+      <div class="fu-step"><span class="fu-num">3</span><p>Switch to <strong>Read</strong> — highlights animate as you scroll</p></div>
+    </div>
+    <button id="btn-first-use-ok" class="btn primary" style="width:100%;margin-top:16px">Let's go!</button>
+  </div>
+</div>
+
+<!-- Toast notification container -->
+<div id="toast-container"></div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

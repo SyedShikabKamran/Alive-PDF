@@ -1,0 +1,34 @@
+{
+  "name": "alive-pdf",
+  "version": "1.0.0",
+  "description": "Urdu novel reader with animated highlights, emoji reactions, and reaction packs — built with Vite + PDF.js",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^8.0.12",
+    "vite-plugin-pwa": "^1.3.0"
+  },
+  "keywords": [
+    "urdu",
+    "pdf-reader",
+    "annotations",
+    "emoji-reactions",
+    "pdfjs",
+    "vite"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@fontsource/noto-nastaliq-urdu": "^5.2.8",
+    "@fontsource/outfit": "^5.2.8",
+    "@fontsource/playfair-display": "^5.2.8",
+    "@fortawesome/fontawesome-free": "^7.3.0",
+    "pdfjs-dist": "^3.4.120"
+  }
+}
