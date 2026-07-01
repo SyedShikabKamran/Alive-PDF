@@ -22,7 +22,7 @@ Built for Urdu novel lovers who share stories over WhatsApp and Telegram. Works 
 
 **No install needed — just click:**
 
-https://github.com/SyedShikabKamran/Alive-PDF.git
+[https://github.com/SyedShikabKamran/Alive-PDF.git](https://syedshikabkamran.github.io/Alive-PDF/)
 
 ---
 
