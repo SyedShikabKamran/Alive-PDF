@@ -24,8 +24,6 @@ Built for Urdu novel lovers who share stories over WhatsApp and Telegram. Works 
 
 https://github.com/SyedShikabKamran/Alive-PDF.git
 
-_(Replace `username` with your GitHub username after you deploy)_
-
 ---
 
 ## 📖 How to use
@@ -109,35 +107,6 @@ Output: `dist/` folder (ready to deploy)
 
 ---
 
-## 🚀 Deploy to the web
-
-### GitHub Pages (recommended for open source)
-
-The workflow is **already set up**. Just:
-
-1. **Push to GitHub** (main branch)
-2. Go to repo → **Settings** → **Pages**
-3. Under "Build and deployment", select **Deploy from a branch**
-4. Branch: `gh-pages` (auto-created by the workflow)
-5. Wait ~2 min → your app is live at `https://username.github.io/alive-pdf`
-
-_The `.github/workflows/deploy.yml` file handles the build & deploy automatically._
-
-### Vercel (alternative — 30 seconds)
-
-1. Push to GitHub
-2. Go to [vercel.com](https://vercel.com) → **Add New Project**
-3. Import your repo → Vercel auto-detects Vite → **Deploy**
-4. Live at `yourname-alive-pdf.vercel.app`
-
-### Netlify (alternative)
-
-1. Push to GitHub
-2. [netlify.com](https://netlify.com) → **Add new site** → Import from Git
-3. Build: `npm run build` · Publish: `dist` → **Deploy**
-
----
-
 ## 💾 Data & privacy
 
 - **Your PDF**: Stored in IndexedDB (browser's local storage) — up to 50MB per browser
@@ -217,13 +186,6 @@ _The `.github/workflows/deploy.yml` file handles the build & deploy automaticall
 
 **Contributions are welcome**, especially from the Urdu reading community.
 
-### Good first issues
-
-- Add a highlight color
-- Translate UI strings to Urdu/Arabic
-- Fix accessibility (a11y) bugs
-- Improve mobile UX
-
 ### How to contribute
 
 1. Fork the repo
@@ -249,16 +211,4 @@ MIT © 2026 — use it, fork it, build on it.
 - **Issues**: [GitHub Issues](https://github.com/username/alive-pdf/issues) for bugs
 - **Discussions**: [GitHub Discussions](https://github.com/username/alive-pdf/discussions) for ideas
 - **Share**: Use it in your reading groups — feedback from real readers drives development
-
----
-
-## 🙏 Credits
-
-- Animated clip-path idea: RTL reading experiences
-- Built with [Vite](https://vitejs.dev/), [PDF.js](https://mozilla.github.io/pdf.js/), vanilla JS
-- Fonts: [Noto Nastaliq Urdu](https://fonts.google.com/noto/specimen/Noto+Nastaliq+Urdu), [Outfit](https://fonts.google.com/specimen/Outfit), [Playfair Display](https://fonts.google.com/specimen/Playfair+Display)
-- Icons: [Font Awesome](https://fontawesome.com/)
-
----
-
 **Happy reading. Let your highlights come alive.** 📖✨
